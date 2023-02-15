@@ -22,6 +22,8 @@ class TestMastermind(unittest.TestCase):
         result = game.compare_guess("RRBB")
         self.assertEqual(result, "BBBB")
         self.assertEqual(game.attempts, 1)
+        self.assertEqual(game.win, True)
+        self.assertEqual(game.lose, False)
 
         # Test 2: la suposión tiene dos colores correctos en posiciones correctas y un color correcto pero en posición errónea
         game = MastermindGame()
@@ -29,13 +31,26 @@ class TestMastermind(unittest.TestCase):
         result = game.compare_guess("RRGB")
         self.assertEqual(result, "BBW")
         self.assertEqual(game.attempts, 1)
+        self.assertEqual(game.win, False)
+        self.assertEqual(game.lose, False)
 
-        # Test 1: la suposición no coincide en nada con la solución
+        # Test 3: la suposición no coincide en nada con la solución
         game = MastermindGame()
         game.secret_solution = ["R", "G", "B", "B"]
         result = game.compare_guess("YYYY")
         self.assertEqual(result, "")
         self.assertEqual(game.attempts, 1)
+        self.assertEqual(game.win, False)
+        self.assertEqual(game.lose, False)
+
+        # Test 4: juego perdido
+        game = MastermindGame()
+        game.secret_solution = ["R", "G", "B", "B"]
+        for _ in range(11):
+            self.assertEqual(game.win, False)
+            self.assertEqual(game.lose, False)
+            game.compare_guess("YYYY")
+        self.assertEqual(game.lose, True)
 
 
     """ Test para obtener el estado actual del juego """
